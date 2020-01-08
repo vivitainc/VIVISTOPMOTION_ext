@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">VIVIWARE StopMotion ext</string>
+    <string name="msg_share_movie">動画ファイルを共有</string>
+    <string name="msg_error_init_ffmpeg">FFMPEG初期化に失敗しました...</string>
+    <string name="msg_create_movie">動画作成中...</string>
+    <string name="msg_failed_generate_mpeg">MPEG生成に失敗しました...</string>
+    <string name="msg_failed_to_init_ffmpeg">FFMPEG初期化に失敗してます...</string>
+</resources>

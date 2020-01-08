@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">VIVIWARE StopMotion ext</string>
+    <string name="msg_share_movie">Share movie</string>
+    <string name="msg_error_init_ffmpeg">Failed to init ffmpeg...</string>
+    <string name="msg_create_movie">Creating movie...</string>
+    <string name="msg_failed_generate_mpeg">Failed to generate mpeg...</string>
+    <string name="msg_failed_to_init_ffmpeg">Failed to init ffmpeg...</string>
+</resources>
