@@ -5,4 +5,5 @@
     <string name="msg_create_movie">Creating movie...</string>
     <string name="msg_failed_generate_mpeg">Failed to generate mpeg...</string>
     <string name="msg_failed_to_init_ffmpeg">Failed to init ffmpeg...</string>
+    <string name="msg_install_completed">VIVIWARE StopMotion Extension has installed</string>
 </resources>

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
@@ -22,7 +23,13 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
         super.onCreate(savedInstanceState)
 
         projectName = intent.getStringExtra(INTENT_EX_PROJECT_NAME) ?: "no_name"
-        projectDir = intent.getStringExtra(INTENT_EX_PROJECT_DIR) ?: "no_name"
+        projectDir = intent.getStringExtra(INTENT_EX_PROJECT_DIR) ?: "no_dir"
+
+        if (projectDir.equals("no_dir")) {
+            Toast.makeText(this, getString(R.string.msg_install_completed),Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
         // request permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -30,6 +37,7 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
         } else {
             startEncodeMpeg()
         }
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
