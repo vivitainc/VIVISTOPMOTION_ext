@@ -15,7 +15,6 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunnin
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * Created by kashimoto on 2017/03/24.
@@ -55,7 +54,7 @@ object MovieUtils {
     fun generateMovieWithFfmpeg(
         context: Context,
         projectName: String,
-        projectDir: String,
+        projectDir: File,
         listener: OnCompleteGenerateListener
     ) {
         if (sFfmpeg == null) {
@@ -66,16 +65,15 @@ object MovieUtils {
             val fileDir = context.filesDir.absolutePath
             val curDate = System.currentTimeMillis()
             // 保存場所
-//            final String mpegFilePath = fileDir+"/video"+curDate + "_" + title +".mp4";
-            val mpegFilePath =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString() + "/" + curDate + "_" + projectName + ".mp4"
+            val mpegDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+            val mpegFile = File(mpegDir, projectName + "_" + curDate + ".mp4")
             val cmdStr =
-                "-f image2 -r 8 -analyzeduration 2147483647 -probesize 2147483647 -i $projectDir$projectName/$SOURCE_FILE_FORMAT -an -vcodec libx264 $mpegFilePath"
+                "-f image2 -r 8 -analyzeduration 2147483647 -probesize 2147483647 -i $projectDir/$SOURCE_FILE_FORMAT -an -vcodec libx264 $mpegFile"
             //            String cmdStr = "-f image2 -r 2 -mPlaySeqNum /sdcard/source%03d.png -an -vcodec libx264 /sdcard/video4.mp4";
             val cmd = cmdStr.split(" ").toTypedArray()
 
             // トータル枚数は？
-            val max = File(projectDir+projectName).listFiles().filter { it.name.startsWith("source") }.size
+            val max = projectDir.listFiles().filter { it.name.startsWith("source") }.size
             Log.w(TAG, "total pages : $max")
 
             // ダイアログをだす
@@ -93,7 +91,12 @@ object MovieUtils {
                     Log.w(TAG, "onProgress : $message")
                     try {
                         if (message.startsWith("frame=")) {
-                            val progress = Integer.parseInt(message.substring(6, message.indexOf("fps=")).trim())
+                            val progress = Integer.parseInt(
+                                message.substring(
+                                    6,
+                                    message.indexOf("fps=")
+                                ).trim()
+                            )
                             Log.w(TAG, "progress $progress")
                             progressDialog.setMax(max)
                             progressDialog.setProgress(progress)
@@ -116,11 +119,11 @@ object MovieUtils {
                 override fun onFinish() {
                     Log.w(
                         TAG,
-                        "onFinish $sMpegEncodeSuccess, path $mpegFilePath"
+                        "onFinish $sMpegEncodeSuccess, path $mpegFile"
                     )
                     progressDialog.dismiss()
                     if (sMpegEncodeSuccess) {
-                        listener.onCompleteGenerateMovie(mpegFilePath)
+                        listener.onCompleteGenerateMovie(mpegFile)
                     } else {
                         Toast.makeText(
                             context,
@@ -182,6 +185,6 @@ object MovieUtils {
     }
 
     interface OnCompleteGenerateListener {
-        fun onCompleteGenerateMovie(filePath: String)
+        fun onCompleteGenerateMovie(file: File)
     }
 }

@@ -6,4 +6,5 @@
     <string name="msg_failed_generate_mpeg">MPEG生成に失敗しました...</string>
     <string name="msg_failed_to_init_ffmpeg">FFMPEG初期化に失敗してます...</string>
     <string name="msg_install_completed">VIVIWARE StopMotion Extensionはインストールされています</string>
+    <string name="msg_please_retry">すいません、もう一度動画作成コマンドを実行してください...</string>
 </resources>
