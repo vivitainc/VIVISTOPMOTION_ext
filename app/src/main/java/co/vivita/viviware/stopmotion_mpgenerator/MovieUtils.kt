@@ -8,11 +8,8 @@ import android.media.MediaFormat
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
-import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg
-import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.arthenica.mobileffmpeg.Config.*
+import com.arthenica.mobileffmpeg.FFmpeg
 import java.io.File
 import java.io.IOException
 
@@ -26,29 +23,29 @@ object MovieUtils {
     const val SOURCE_FILE_FORMAT = "source%04d.jpg"
 
     fun standbyFfmpeg(context: Context?) {
-        sFfmpeg = FFmpeg.getInstance(context)
-        try {
-            sFfmpeg!!.loadBinary(object : LoadBinaryResponseHandler() {
-                override fun onStart() {
-                    Log.w(TAG, "load onStart")
-                }
-
-                override fun onFailure() {
-                    Toast.makeText(context, R.string.msg_error_init_ffmpeg, Toast.LENGTH_LONG)
-                        .show()
-                    Log.w(TAG, "load onFailure")
-                }
-
-                override fun onSuccess() {
-                    Log.w(TAG, "load onSuccess")
-                }
-
-                override fun onFinish() {
-                    Log.w(TAG, "load onFinish")
-                }
-            })
-        } catch (e: FFmpegNotSupportedException) { // Handle if FFmpeg is not supported by device
-        }
+//        sFfmpeg = FFmpeg.getInstance(context)
+//        try {
+//            sFfmpeg!!.loadBinary(object : LoadBinaryResponseHandler() {
+//                override fun onStart() {
+//                    Log.w(TAG, "load onStart")
+//                }
+//
+//                override fun onFailure() {
+//                    Toast.makeText(context, R.string.msg_error_init_ffmpeg, Toast.LENGTH_LONG)
+//                        .show()
+//                    Log.w(TAG, "load onFailure")
+//                }
+//
+//                override fun onSuccess() {
+//                    Log.w(TAG, "load onSuccess")
+//                }
+//
+//                override fun onFinish() {
+//                    Log.w(TAG, "load onFinish")
+//                }
+//            })
+//        } catch (e: FFmpegNotSupportedException) { // Handle if FFmpeg is not supported by device
+//        }
     }
 
     fun generateMovieWithFfmpeg(
@@ -82,58 +79,69 @@ object MovieUtils {
             progressDialog.setCancelable(false)
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
             progressDialog.show()
-            sFfmpeg!!.execute(cmd, object : ExecuteBinaryResponseHandler() {
-                override fun onStart() {
-                    Log.w(TAG, "onStart")
-                }
 
-                override fun onProgress(message: String) {
-                    Log.w(TAG, "onProgress : $message")
-                    try {
-                        if (message.startsWith("frame=")) {
-                            val progress = Integer.parseInt(
-                                message.substring(
-                                    6,
-                                    message.indexOf("fps=")
-                                ).trim()
-                            )
-                            Log.w(TAG, "progress $progress")
-                            progressDialog.setMax(max)
-                            progressDialog.setProgress(progress)
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
+            val rc = FFmpeg.execute("-f image2 -r 8 -analyzeduration 2147483647 -probesize 2147483647 -i $projectDir/$SOURCE_FILE_FORMAT -an -vcodec libx264 $mpegFile")
 
-                override fun onFailure(message: String) {
-                    Log.w(TAG, "onFailure : $message")
-                    sMpegEncodeSuccess = false
-                }
+            when (rc) {
+                RETURN_CODE_SUCCESS -> {
 
-                override fun onSuccess(message: String) {
-                    Log.w(TAG, "onSuccess : $message")
-                    sMpegEncodeSuccess = true
                 }
+                RETURN_CODE_CANCEL -> {
 
-                override fun onFinish() {
-                    Log.w(
-                        TAG,
-                        "onFinish $sMpegEncodeSuccess, path $mpegFile"
-                    )
-                    progressDialog.dismiss()
-                    if (sMpegEncodeSuccess) {
-                        listener.onCompleteGenerateMovie(mpegFile)
-                    } else {
-                        Toast.makeText(
-                            context,
-                            R.string.msg_failed_generate_mpeg,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
                 }
-            })
-        } catch (e: FFmpegCommandAlreadyRunningException) { // Handle if FFmpeg is already running
+            }
+//            {
+//                override fun onStart() {
+//                    Log.w(TAG, "onStart")
+//                }
+//
+//                override fun onProgress(message: String) {
+//                    Log.w(TAG, "onProgress : $message")
+//                    try {
+//                        if (message.startsWith("frame=")) {
+//                            val progress = Integer.parseInt(
+//                                message.substring(
+//                                    6,
+//                                    message.indexOf("fps=")
+//                                ).trim()
+//                            )
+//                            Log.w(TAG, "progress $progress")
+//                            progressDialog.setMax(max)
+//                            progressDialog.setProgress(progress)
+//                        }
+//                    } catch (e: Exception) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//
+//                override fun onFailure(message: String) {
+//                    Log.w(TAG, "onFailure : $message")
+//                    sMpegEncodeSuccess = false
+//                }
+//
+//                override fun onSuccess(message: String) {
+//                    Log.w(TAG, "onSuccess : $message")
+//                    sMpegEncodeSuccess = true
+//                }
+//
+//                override fun onFinish() {
+//                    Log.w(
+//                        TAG,
+//                        "onFinish $sMpegEncodeSuccess, path $mpegFile"
+//                    )
+//                    progressDialog.dismiss()
+//                    if (sMpegEncodeSuccess) {
+//                        listener.onCompleteGenerateMovie(mpegFile)
+//                    } else {
+//                        Toast.makeText(
+//                            context,
+//                            R.string.msg_failed_generate_mpeg,
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+//                }
+//            })
+        } catch (e: Exception) { // Handle if FFmpeg is already running
         }
     }
 

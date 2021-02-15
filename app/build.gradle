@@ -26,7 +26,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
+    // NOTE: フル機能が使えるがサポートされるAPIレベルが24以上
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.4.LTS'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
