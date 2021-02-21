@@ -1,2 +1,4 @@
+include ':ffmpeg'
+include ':ffmpeg_built'
 include ':app'
 rootProject.name='VIVISTOPMOTION_MPGenerator'
