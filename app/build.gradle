@@ -28,6 +28,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar'])
 //    implementation(name: 'ffmpeg', ext: 'aar')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlin_coroutines_version}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlin_coroutines_version}"
+
     // NOTE: フル機能が使えるがサポートされるAPIレベルが24以上
     implementation 'com.arthenica:mobile-ffmpeg-full-gpl:4.4.LTS'
 

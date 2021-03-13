@@ -88,9 +88,8 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
     }
 
     fun startEncodeMpeg(projectDir: File) {
-        MovieUtils.standbyFfmpeg(this)
+//        MovieUtils.standbyFfmpeg(this)
         val file1 = File(projectDir, "source0000.jpg")
-        img1.setImageBitmap(BitmapFactory.decodeFile(file1.absolutePath))
         MovieUtils.generateMovieWithFfmpeg(this, projectName, projectDir, this)
     }
 
