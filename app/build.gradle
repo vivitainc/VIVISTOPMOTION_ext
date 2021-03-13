@@ -12,7 +12,7 @@ android {
         minSdkVersion 25
         targetSdkVersion 28 // 29にすると死ぬ
         versionCode 2
-        versionName "3.0"
+        versionName "4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
