@@ -95,6 +95,7 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
     }
 
     override fun onCompleteGenerateMovie(file: File) {
+        Log.w(TAG, "onCompleteGenerateMovie")
         val intent = Intent()
         val uri = FileProvider.getUriForFile(this, packageName + ".fileprovider", file)
         grantUriPermission("co.vivita.viviware.stopmotion.mgd", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -103,6 +104,7 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         intent.putExtra(INTENT_EX_MPEG_NAME, file.name)
         setResult(RESULT_OK, intent)
+        Log.w(TAG, "finish")
         finish()
     }
 

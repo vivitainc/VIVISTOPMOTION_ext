@@ -75,11 +75,11 @@ object MovieUtils {
             Log.w(TAG, "total pages : $max")
 
             // ダイアログをだす
-            val progressDialog = ProgressDialog(context)
-            progressDialog.setTitle(context.getString(R.string.msg_create_movie))
-            progressDialog.setCancelable(false)
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-            progressDialog.show()
+//            val progressDialog = ProgressDialog(context)
+//            progressDialog.setTitle(context.getString(R.string.msg_create_movie))
+//            progressDialog.setCancelable(false)
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+//            progressDialog.show()
 
             Log.w(TAG, "source file : $projectDir/$SOURCE_FILE_FORMAT")
             val rc = FFmpeg.execute("-f image2 -r 8 -analyzeduration 2147483647 -probesize 2147483647 -i $projectDir/$SOURCE_FILE_FORMAT -an -vcodec libx264 $mpegFile")
@@ -88,6 +88,7 @@ object MovieUtils {
             when (rc) {
                 RETURN_CODE_SUCCESS -> {
                     Log.w(TAG, "ffmpeg rc success")
+                    listener.onCompleteGenerateMovie(mpegFile)
                 }
                 RETURN_CODE_CANCEL -> {
                     Log.w(TAG, "ffmpeg rc cancel")
@@ -148,6 +149,7 @@ object MovieUtils {
 //                }
 //            })
         } catch (e: Exception) { // Handle if FFmpeg is already running
+            e.printStackTrace()
         }
     }
 
