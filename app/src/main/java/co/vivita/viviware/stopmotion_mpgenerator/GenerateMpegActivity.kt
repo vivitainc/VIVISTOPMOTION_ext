@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 
@@ -25,6 +27,7 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         // request permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -85,11 +88,13 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
     }
 
     fun startEncodeMpeg(projectDir: File) {
-        MovieUtils.standbyFfmpeg(this)
+//        MovieUtils.standbyFfmpeg(this)
+        val file1 = File(projectDir, "source0000.jpg")
         MovieUtils.generateMovieWithFfmpeg(this, projectName, projectDir, this)
     }
 
     override fun onCompleteGenerateMovie(file: File) {
+        Log.w(TAG, "onCompleteGenerateMovie")
         val intent = Intent()
         val uri = FileProvider.getUriForFile(this, packageName + ".fileprovider", file)
         grantUriPermission("co.vivita.viviware.stopmotion.mgd", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -98,6 +103,7 @@ class GenerateMpegActivity : AppCompatActivity(), MovieUtils.OnCompleteGenerateL
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         intent.putExtra(INTENT_EX_MPEG_NAME, file.name)
         setResult(RESULT_OK, intent)
+        Log.w(TAG, "finish")
         finish()
     }
 
